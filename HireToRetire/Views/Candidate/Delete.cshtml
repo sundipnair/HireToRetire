@@ -38,7 +38,7 @@
     
     <form asp-action="DeleteSave">
         <div style="color:red">@ViewData["Message"]</div><br>
-        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <div class="btn btn-default">@Html.ActionLink("Delete", "DeleteSave", Model)</div>
         <a asp-action="Index">Back to List</a>
     </form>
 </div>

@@ -10,10 +10,12 @@ namespace HireToRetire.Controllers
 {
     public class CandidateController : Controller
     {
+        string domain = "candidateregistration";
+
         public IActionResult Index()
         {
-            List<CandidateViewModel> candidates = new ApiService(new Uri("http://40.118.66.69"))
-                .GetAsync<List<CandidateViewModel>>(new Uri("http://40.118.66.69/api/candidates")).Result;
+            List<CandidateViewModel> candidates = new ApiService(new Uri($"http://{domain}"))
+                .GetAsync<List<CandidateViewModel>>(new Uri($"http://{domain}/api/candidates")).Result;
 
             return View(candidates);
         }
@@ -26,7 +28,7 @@ namespace HireToRetire.Controllers
         public IActionResult CreateSave(CandidateViewModel candidate)
         {
             // call api to save
-            new ApiService(new Uri("http://40.118.66.69")).PostAsync<CandidateViewModel>(new Uri("http://40.118.66.69/api/candidates"), candidate);
+            new ApiService(new Uri($"http://{domain}")).PostAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates"), candidate);
             ViewData["Message"] = "Candidate successfully registered";
             return View("Create");
         }
@@ -38,8 +40,8 @@ namespace HireToRetire.Controllers
 
         public IActionResult EditSave(CandidateViewModel candidate)
         {
-            // call api to save
-            new ApiService(new Uri("http://40.118.66.69")).PutAsync<CandidateViewModel>(new Uri($"http://40.118.66.69/api/candidates/{candidate.Id}"), candidate);
+            // call api to update
+            new ApiService(new Uri($"http://{domain}")).PutAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates/{candidate.Id}"), candidate);
             ViewData["Message"] = "Candidate successfully updated";
             return View("Edit");
         }
@@ -57,7 +59,7 @@ namespace HireToRetire.Controllers
         public IActionResult DeleteSave(CandidateViewModel candidate)
         {
             // call api to delete
-            new ApiService(new Uri("http://40.118.66.69")).DeleteAsync<CandidateViewModel>(new Uri($"http://40.118.66.69/api/candidates/{candidate.Id}"));
+            new ApiService(new Uri($"http://{domain}")).DeleteAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates/{candidate.Id}"));
             ViewData["Message"] = "Candidate successfully deleted";
             return View("Delete");
         }
