@@ -4,7 +4,7 @@
 fullnameOverride: hiretoretire
 replicaCount: 1
 image:
-  repository: hiretoretire
+  repository: sundipnair/hiretoretire
   tag: latest
   pullPolicy: Always
 imagePullSecrets: []
