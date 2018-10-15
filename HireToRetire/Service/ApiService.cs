@@ -48,6 +48,30 @@ namespace HireToRetire.Service
             //return JsonConvert.DeserializeObject<Message<T>>(data);
         }
 
+        /// <summary>  
+        /// Common method for making PUT calls  
+        /// </summary>  
+        internal async void PutAsync<T>(Uri requestUrl, T content)
+        {
+            addHeaders();
+            var response = await _httpClient.PutAsync(requestUrl.ToString(), CreateHttpContent<T>(content));
+            response.EnsureSuccessStatusCode();
+            //var data = await response.Content.ReadAsStringAsync();
+            //return JsonConvert.DeserializeObject<Message<T>>(data);
+        }
+
+        /// <summary>  
+        /// Common method for making DELETE calls  
+        /// </summary>  
+        internal async void DeleteAsync<T>(Uri requestUrl)
+        {
+            addHeaders();
+            var response = await _httpClient.DeleteAsync(requestUrl.ToString());
+            response.EnsureSuccessStatusCode();
+            //var data = await response.Content.ReadAsStringAsync();
+            //return JsonConvert.DeserializeObject<Message<T>>(data);
+        }
+
         private Uri CreateRequestUri(string relativePath, string queryString = "")
         {
             var endpoint = new Uri(BaseEndpoint, relativePath);

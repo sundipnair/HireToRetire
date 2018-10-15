@@ -39,6 +39,7 @@ namespace HireToRetire.Controllers
         public IActionResult EditSave(CandidateViewModel candidate)
         {
             // call api to save
+            new ApiService(new Uri("http://40.118.66.69")).PutAsync<CandidateViewModel>(new Uri($"http://40.118.66.69/api/candidates/{candidate.Id}"), candidate);
             ViewData["Message"] = "Candidate successfully updated";
             return View("Edit");
         }
@@ -56,6 +57,7 @@ namespace HireToRetire.Controllers
         public IActionResult DeleteSave(CandidateViewModel candidate)
         {
             // call api to delete
+            new ApiService(new Uri("http://40.118.66.69")).DeleteAsync<CandidateViewModel>(new Uri($"http://40.118.66.69/api/candidates/{candidate.Id}"));
             ViewData["Message"] = "Candidate successfully deleted";
             return View("Delete");
         }
