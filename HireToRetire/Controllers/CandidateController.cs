@@ -109,7 +109,7 @@ namespace HireToRetire.Controllers
                         consumer.CommitAsync(msg);
                     };
 
-                    for (int i = 1; i <= 50; i++)
+                    for (int i = 1; i <= 500; i++)
                     {
                         consumer.Poll(100);
                     }
