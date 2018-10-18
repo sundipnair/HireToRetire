@@ -82,37 +82,46 @@ namespace HireToRetire.Controllers
         public List<string> Check()
         {
             List<string> ret = new List<string>();
-            var config = new Dictionary<string, object>
+            try
             {
-                { "group.id", "hiretoretire" },
-                { "bootstrap.servers", "kafka-cp-kafka:9092" },
-                { "enable.auto.commit", "false"}
-            };
+                //List<string> ret = new List<string>();
+                var config = new Dictionary<string, object>
+                {
+                    { "group.id", "hiretoretire" },
+                    { "bootstrap.servers", "kafka-cp-kafka:9092" },
+                    { "enable.auto.commit", "false"}
+                };
 
-            using (var consumer = new Consumer<Null, string>(config, null, new StringDeserializer(Encoding.UTF8)))
-            {
-                consumer.Subscribe(new string[] { "candidate-topic" });
+                using (var consumer = new Consumer<Null, string>(config, null, new StringDeserializer(Encoding.UTF8)))
+                {
+                    consumer.Subscribe(new string[] { "candidate-topic" });
 
-                Message<Null, string> msg;
+                    Message<Null, string> msg;
 
-                consumer.Consume(out msg, 1000);
+                    consumer.Consume(out msg, 1000);
 
-                ret.Add($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value}");
+                    ret.Add($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value}");
 
-                //consumer.OnMessage += (_, msg) =>
-                //{
-                //    ret.Add($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value}");
-                //    //Console.WriteLine($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value}");
-                //    consumer.CommitAsync(msg);
-                //};
+                    //consumer.OnMessage += (_, msg) =>
+                    //{
+                    //    ret.Add($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value}");
+                    //    //Console.WriteLine($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value}");
+                    //    consumer.CommitAsync(msg);
+                    //};
 
-                //for (int i = 1; i <= 5; i++)
-                //{
-                //    consumer.Poll(100);
-                //}
+                    //for (int i = 1; i <= 5; i++)
+                    //{
+                    //    consumer.Poll(100);
+                    //}
+                }
+
+                return ret;
             }
-
-            return ret;
+            catch (Exception ex)
+            {
+                ret.Add(ex.ToString());
+                return ret;
+            }
         }
 
         private void KPub(string data)
