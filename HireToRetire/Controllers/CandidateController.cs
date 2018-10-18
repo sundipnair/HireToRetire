@@ -96,23 +96,23 @@ namespace HireToRetire.Controllers
                 {
                     consumer.Subscribe(new string[] { "candidate-topic" });
 
-                    Message<Null, string> msg;
+                    //Message<Null, string> msg;
 
-                    consumer.Consume(out msg, 1000);
+                    //consumer.Consume(out msg, 1000);
 
-                    ret.Add($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value}");
+                    //ret.Add($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value}");
 
-                    //consumer.OnMessage += (_, msg) =>
-                    //{
-                    //    ret.Add($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value}");
-                    //    //Console.WriteLine($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value}");
-                    //    consumer.CommitAsync(msg);
-                    //};
+                    consumer.OnMessage += (_, msg) =>
+                    {
+                        ret.Add($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value}");
+                        //Console.WriteLine($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value}");
+                        consumer.CommitAsync(msg);
+                    };
 
-                    //for (int i = 1; i <= 5; i++)
-                    //{
-                    //    consumer.Poll(100);
-                    //}
+                    for (int i = 1; i <= 50; i++)
+                    {
+                        consumer.Poll(100);
+                    }
                 }
 
                 return ret;
