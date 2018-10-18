@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 using HireToRetire.Models;
 using HireToRetire.Service;
 using Microsoft.AspNetCore.Mvc;
+using Confluent.Kafka;
+using Confluent.Kafka.Serialization;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace HireToRetire.Controllers
 {
@@ -28,7 +32,18 @@ namespace HireToRetire.Controllers
         public IActionResult CreateSave(CandidateViewModel candidate)
         {
             // call api to save
-            new ApiService(new Uri($"http://{domain}")).PostAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates"), candidate);
+            //new ApiService(new Uri($"http://{domain}")).PostAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates"), candidate);
+
+            try
+            {
+                KPub(JsonConvert.SerializeObject(candidate));
+            }
+            catch (Exception)
+            {
+                throw;
+                //return View("Home/Error");
+            }
+
             ViewData["Message"] = "Candidate successfully registered";
             return View("Create");
         }
@@ -62,6 +77,21 @@ namespace HireToRetire.Controllers
             new ApiService(new Uri($"http://{domain}")).DeleteAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates/{candidate.Id}"));
             ViewData["Message"] = "Candidate successfully deleted";
             return View("Delete");
+        }
+
+        private void KPub(string data)
+        {
+            string topicName = "candidate-topic";
+
+            var config = new Dictionary<string, object>
+            {
+                { "bootstrap.servers", "kafka-cp-kafka:9092" }
+            };
+
+            using (var producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8)))
+            {
+                var deliveryReport = producer.ProduceAsync(topicName, null, data).Result;
+            }
         }
     }
 }
