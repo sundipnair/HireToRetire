@@ -79,6 +79,36 @@ namespace HireToRetire.Controllers
             return View("Delete");
         }
 
+        public List<string> Check()
+        {
+            List<string> ret = new List<string>();
+            var config = new Dictionary<string, object>
+            {
+                { "group.id", "hiretoretire" },
+                { "bootstrap.servers", "kafka-cp-kafka:9092" },
+                { "enable.auto.commit", "false"}
+            };
+
+            using (var consumer = new Consumer<Null, string>(config, null, new StringDeserializer(Encoding.UTF8)))
+            {
+                consumer.Subscribe(new string[] { "candidate-topic" });
+
+                consumer.OnMessage += (_, msg) =>
+                {
+                    ret.Add($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value}");
+                    //Console.WriteLine($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value}");
+                    consumer.CommitAsync(msg);
+                };
+
+                for (int i = 1; i <= 5; i++)
+                {
+                    consumer.Poll(100);
+                }
+            }
+
+            return ret;
+        }
+
         private void KPub(string data)
         {
             string topicName = "candidate-topic";
