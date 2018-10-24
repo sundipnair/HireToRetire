@@ -32,17 +32,17 @@ namespace HireToRetire.Controllers
         public IActionResult CreateSave(CandidateViewModel candidate)
         {
             // call api to save
-            //new ApiService(new Uri($"http://{domain}")).PostAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates"), candidate);
+            new ApiService(new Uri($"http://{domain}")).PostAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates"), candidate);
 
-            try
-            {
-                KPub(JsonConvert.SerializeObject(candidate));
-            }
-            catch (Exception)
-            {
-                throw;
-                //return View("Home/Error");
-            }
+            // try
+            // {
+            //     KPub(JsonConvert.SerializeObject(candidate));
+            // }
+            // catch (Exception)
+            // {
+            //     throw;
+            //     //return View("Home/Error");
+            // }
 
             ViewData["Message"] = "Candidate successfully registered";
             return View("Create");
