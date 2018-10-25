@@ -11,9 +11,9 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: https
+      targetPort: http
       protocol: TCP
-      name: https
+      name: http
   selector:
     app: {{ template "hiretoretire.name" . }}
     release: {{ .Release.Name }}

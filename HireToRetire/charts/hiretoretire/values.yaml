@@ -15,8 +15,8 @@ imagePullSecrets: []
   # This uses credentials from secret "myRegistryKeySecretName".
   # - name: myRegistryKeySecretName
 service:
-  type: LoadBalancer
-  port: 443
+  type: ClusterIP
+  port: 80
 
 probes:
   enabled: false
