@@ -11,10 +11,7 @@ namespace HireToRetire
 
         public AzureAdB2COptions()
         {
-            AzureAdB2CInstance = "https://CapApps.b2clogin.com";
-            // https://CapApps.b2clogin.com/CapApps.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_SignUpIn
-
-            // https://login.microsoftonline.com/CapApps.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_SignUpIn
+            AzureAdB2CInstance = "https://login.microsoftonline.com/tfp";
         }
 
         public string ClientId { get; set; }
