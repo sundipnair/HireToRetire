@@ -14,6 +14,8 @@ namespace HireToRetire
 {
     public class Startup
     {
+        public static string ScopeRead;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -63,6 +65,9 @@ namespace HireToRetire
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            ScopeRead = Configuration["AzureAdB2C:ScopeRead"];
+            app.UseAuthentication();
 
             app.UseStaticFiles();
             app.UseCookiePolicy();

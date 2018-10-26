@@ -9,12 +9,28 @@ using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
 using System.Text;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HireToRetire.Controllers
 {
+    [Authorize]
     public class CandidateController : Controller
     {
         string domain = "candidateregistration";
+
+        //public IActionResult Hello()
+        //{
+
+        //    var scopes = HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/scope")?.Value;
+        //    if (!string.IsNullOrEmpty(Startup.ScopeRead) && scopes != null && scopes.Split(' ').Any(s => s.Equals(Startup.ScopeRead)))
+        //    {
+        //        return Ok("Hello There");
+        //    }
+        //    else
+        //    {
+        //        return Unauthorized();
+        //    }
+        //}
 
         public IActionResult Index()
         {
