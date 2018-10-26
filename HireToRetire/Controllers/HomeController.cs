@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HireToRetire.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HireToRetire.Controllers
 {
@@ -15,6 +16,7 @@ namespace HireToRetire.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -22,6 +24,7 @@ namespace HireToRetire.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
@@ -29,6 +32,7 @@ namespace HireToRetire.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();

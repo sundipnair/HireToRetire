@@ -9,9 +9,11 @@ using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
 using System.Text;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HireToRetire.Controllers
 {
+    [Authorize]
     public class CandidateController : Controller
     {
         string domain = "candidateregistration";
