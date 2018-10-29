@@ -27,15 +27,7 @@ namespace HireToRetire
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.Configure<CookiePolicyOptions>(options =>
-            //{
-            //    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-            //    options.CheckConsentNeeded = context => true;
-            //    options.MinimumSameSitePolicy = SameSiteMode.None;
-            //});
-
-            //services.Configure<AzureAdB2COptions>(Configuration.GetSection("Authentication:AzureAdB2C"));
-            //services.AddSingleton<IConfigureOptions<OpenIdConnectOptions>, OpenIdConnectOptionsSetup>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddAuthentication(sharedOptions =>
             {
@@ -45,12 +37,12 @@ namespace HireToRetire
             .AddAzureAdB2C(options => Configuration.Bind("Authentication:AzureAdB2C", options))
             .AddCookie();
 
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddSessionStateTempDataProvider();
+            services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromHours(1);
-                options.CookieHttpOnly = true;
+                //options.CookieHttpOnly = true;
             });
         }
 
@@ -67,9 +59,10 @@ namespace HireToRetire
             }
 
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+            //app.UseCookiePolicy();
 
             app.UseSession();
+
             app.UseAuthentication();
 
             app.UseMvc(routes =>
