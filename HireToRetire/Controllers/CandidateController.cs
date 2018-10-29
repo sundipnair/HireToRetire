@@ -34,17 +34,17 @@ namespace HireToRetire.Controllers
         public IActionResult CreateSave(CandidateViewModel candidate)
         {
             // call api to save
-            new ApiService(new Uri($"http://{domain}")).PostAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates"), candidate);
+            //new ApiService(new Uri($"http://{domain}")).PostAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates"), candidate);
 
-            // try
-            // {
-            //     KPub(JsonConvert.SerializeObject(candidate));
-            // }
-            // catch (Exception)
-            // {
-            //     throw;
-            //     //return View("Home/Error");
-            // }
+            try
+            {
+                KPub(JsonConvert.SerializeObject(candidate));
+            }
+            catch (Exception)
+            {
+                throw;
+                //return View("Home/Error");
+            }
 
             ViewData["Message"] = "Candidate successfully registered";
             return View("Create");
@@ -90,7 +90,7 @@ namespace HireToRetire.Controllers
                 var config = new Dictionary<string, object>
                 {
                     { "group.id", "hiretoretire" },
-                    { "bootstrap.servers", "kafka-cp-kafka:9092" },
+                    { "bootstrap.servers", "confkafka-cp-kafka:9092" },
                     { "enable.auto.commit", "false"}
                 };
 
@@ -132,7 +132,7 @@ namespace HireToRetire.Controllers
 
             var config = new Dictionary<string, object>
             {
-                { "bootstrap.servers", "kafka-cp-kafka:9092" }
+                { "bootstrap.servers", "confkafka-cp-kafka:9092" }
             };
 
             using (var producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8)))
