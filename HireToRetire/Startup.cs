@@ -42,7 +42,7 @@ namespace HireToRetire
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromHours(1);
-                //options.CookieHttpOnly = true;
+                options.CookieHttpOnly = true;
             });
         }
 
