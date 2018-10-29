@@ -59,7 +59,7 @@ namespace HireToRetire
             }
 
             app.UseStaticFiles();
-            //app.UseCookiePolicy();
+            app.UseCookiePolicy();
 
             app.UseSession();
 
