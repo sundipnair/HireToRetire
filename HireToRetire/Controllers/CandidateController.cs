@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace HireToRetire.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class CandidateController : Controller
     {
         string domain = "candidateregistration";
