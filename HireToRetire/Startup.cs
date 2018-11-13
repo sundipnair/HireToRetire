@@ -29,21 +29,21 @@ namespace HireToRetire
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            //services.AddAuthentication(sharedOptions =>
-            //{
-            //    sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            //    sharedOptions.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            //})
-            //.AddAzureAdB2C(options => Configuration.Bind("Authentication:AzureAdB2C", options))
-            //.AddCookie();
+            services.AddAuthentication(sharedOptions =>
+            {
+                sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+            .AddAzureAdB2C(options => Configuration.Bind("Authentication:AzureAdB2C", options))
+            .AddCookie();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddSessionStateTempDataProvider();
-            //services.AddDistributedMemoryCache();
-            //services.AddSession(options =>
-            //{
-            //    options.IdleTimeout = TimeSpan.FromHours(1);
-            //    options.CookieHttpOnly = true;
-            //});
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(1);
+                options.CookieHttpOnly = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,9 +61,9 @@ namespace HireToRetire
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            //app.UseSession();
+            app.UseSession();
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

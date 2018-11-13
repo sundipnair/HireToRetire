@@ -17,6 +17,7 @@ namespace HireToRetire.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -24,6 +25,7 @@ namespace HireToRetire.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
@@ -31,6 +33,7 @@ namespace HireToRetire.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();

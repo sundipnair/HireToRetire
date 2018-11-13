@@ -10,20 +10,78 @@ using Confluent.Kafka.Serialization;
 using System.Text;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.Identity.Client;
+using System.Net.Http;
+using System.Net;
+using System.Net.Http.Headers;
 
 namespace HireToRetire.Controllers
 {
+    [Authorize]
     public class CandidateController : Controller
     {
-        string domain = "candidateregistration";
+        string domain = "azdemoapimgnt.azure-api.net/candidatereg";
+        string clientId = "0d36c971-15e4-4453-9e1f-2a44deb5b31e";
+        string authority = "https://login.microsoftonline.com/tfp/capapps.onmicrosoft.com/B2C_1_SignUpIn/v2.0/.well-known/openid-configuration";
+        string redirectUri = "http://localhost:32774/signin-oidc";
+        string clientSecret = "M3.653[FaHr)E70Gx1D>w1E-";
+        string apiEndpoint = "http://azdemoapimgnt.azure-api.net/candidatereg/api/Candidates/Test";
 
-        public IActionResult Index()
+        public async Task<string> Index()
         {
-            List<CandidateViewModel> candidates = new ApiService(new Uri($"http://{domain}"))
-                .GetAsync<List<CandidateViewModel>>(new Uri($"http://{domain}/api/candidates")).Result;
+            try
+            {
+                // Retrieve the token with the specified scopes
+                var scope = new string[] { "https://CapApps.onmicrosoft.com/cr-api/read" };
+                string signedInUserID = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                TokenCache userTokenCache = new MSALSessionCache(signedInUserID, this.HttpContext).GetMsalCacheInstance();
+                ConfidentialClientApplication cca = new ConfidentialClientApplication(clientId, authority, redirectUri, new ClientCredential(clientSecret), userTokenCache, null);
 
-            return View(candidates);
+                //var user = cca.Users.FirstOrDefault();
+                var user = cca.GetAccountsAsync().Result.FirstOrDefault();
+                if (user == null)
+                {
+                    throw new Exception("The User is NULL.  Please clear your cookies and try again.");
+                }
+
+                AuthenticationResult result = await cca.AcquireTokenSilentAsync(scope, user, authority, false);
+
+                HttpClient client = new HttpClient();
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, apiEndpoint);
+
+                // Add token to the Authorization header and make the request
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
+                request.Headers.Add("Ocp-Apim-Subscription-Key", "d8f0219eb112429ea89804114d4aff2a");
+                request.Headers.Add("Ocp-Apim-Trace", "true");
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                // Handle the response
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                        String responseString = await response.Content.ReadAsStringAsync();
+                        return responseString;
+                    case HttpStatusCode.Unauthorized:
+                        String errorString = await response.Content.ReadAsStringAsync();
+                        return "Please sign in again. " + response.ReasonPhrase + " - " + errorString;
+                    default:
+                        return "Error. Status code = " + response.StatusCode + ": " + response.ReasonPhrase;
+                }
+            }
+            catch (Exception ex)
+            {
+                return "Error reading: " + ex.Message;
+            }
         }
+
+        //public IActionResult Index()
+        //{
+        //    List<CandidateViewModel> candidates = new ApiService(new Uri($"https://{domain}"))
+        //        .GetAsync<List<CandidateViewModel>>(new Uri($"https://{domain}/api/candidates")).Result;
+
+        //    return View(candidates);
+        //}
 
         public IActionResult Create()
         {
@@ -57,7 +115,7 @@ namespace HireToRetire.Controllers
         public IActionResult EditSave(CandidateViewModel candidate)
         {
             // call api to update
-            new ApiService(new Uri($"http://{domain}")).PutAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates/{candidate.Id}"), candidate);
+            new ApiService(new Uri($"https://{domain}")).PutAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"), candidate);
             ViewData["Message"] = "Candidate successfully updated";
             return View("Edit");
         }
@@ -75,7 +133,7 @@ namespace HireToRetire.Controllers
         public IActionResult DeleteSave(CandidateViewModel candidate)
         {
             // call api to delete
-            new ApiService(new Uri($"http://{domain}")).DeleteAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates/{candidate.Id}"));
+            new ApiService(new Uri($"https://{domain}")).DeleteAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"));
             ViewData["Message"] = "Candidate successfully deleted";
             return View("Delete");
         }
