@@ -26,7 +26,6 @@ namespace HireToRetire.Controllers
         string authority = "https://login.microsoftonline.com/tfp/capapps.onmicrosoft.com/B2C_1_SignUpIn/v2.0/.well-known/openid-configuration";
         string redirectUri = "http://localhost:32768/signin-oidc";
         string clientSecret = "M3.653[FaHr)E70Gx1D>w1E-";
-        string apiEndpoint = "http://azdemoapimgnt.azure-api.net/candidatereg/api/Candidates/Test";
         string[] scope = new string[] { "https://CapApps.onmicrosoft.com/cr-api/read" };
 
         public async Task<string> TestString()
@@ -35,6 +34,7 @@ namespace HireToRetire.Controllers
             {
                 AuthenticationResult result = await GetAuthResultAsync();
 
+                string apiEndpoint = $"https://{domain}/api/Candidates/Test";
                 HttpClient client = new HttpClient();
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, apiEndpoint);
 
@@ -81,7 +81,7 @@ namespace HireToRetire.Controllers
         public async Task<IActionResult> CreateSave(CandidateViewModel candidate, AuthenticationResult result)
         {
             // call api to save
-            new ApiService(new Uri($"http://{domain}")).PostAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates"), candidate, result);
+            new ApiService(new Uri($"https://{domain}")).PostAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates"), candidate, result);
 
             //try
             //{
