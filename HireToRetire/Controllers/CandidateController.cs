@@ -24,28 +24,16 @@ namespace HireToRetire.Controllers
         string domain = "azdemoapimgnt.azure-api.net/candidatereg";
         string clientId = "0d36c971-15e4-4453-9e1f-2a44deb5b31e";
         string authority = "https://login.microsoftonline.com/tfp/capapps.onmicrosoft.com/B2C_1_SignUpIn/v2.0/.well-known/openid-configuration";
-        string redirectUri = "http://localhost:32774/signin-oidc";
+        string redirectUri = "http://localhost:32768/signin-oidc";
         string clientSecret = "M3.653[FaHr)E70Gx1D>w1E-";
         string apiEndpoint = "http://azdemoapimgnt.azure-api.net/candidatereg/api/Candidates/Test";
+        string[] scope = new string[] { "https://CapApps.onmicrosoft.com/cr-api/read" };
 
-        public async Task<string> Index()
+        public async Task<string> TestString()
         {
             try
             {
-                // Retrieve the token with the specified scopes
-                var scope = new string[] { "https://CapApps.onmicrosoft.com/cr-api/read" };
-                string signedInUserID = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                TokenCache userTokenCache = new MSALSessionCache(signedInUserID, this.HttpContext).GetMsalCacheInstance();
-                ConfidentialClientApplication cca = new ConfidentialClientApplication(clientId, authority, redirectUri, new ClientCredential(clientSecret), userTokenCache, null);
-
-                //var user = cca.Users.FirstOrDefault();
-                var user = cca.GetAccountsAsync().Result.FirstOrDefault();
-                if (user == null)
-                {
-                    throw new Exception("The User is NULL.  Please clear your cookies and try again.");
-                }
-
-                AuthenticationResult result = await cca.AcquireTokenSilentAsync(scope, user, authority, false);
+                AuthenticationResult result = await GetAuthResultAsync();
 
                 HttpClient client = new HttpClient();
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, apiEndpoint);
@@ -75,65 +63,71 @@ namespace HireToRetire.Controllers
             }
         }
 
-        //public IActionResult Index()
-        //{
-        //    List<CandidateViewModel> candidates = new ApiService(new Uri($"https://{domain}"))
-        //        .GetAsync<List<CandidateViewModel>>(new Uri($"https://{domain}/api/candidates")).Result;
+        public async Task<IActionResult> Index()
+        {
+            AuthenticationResult result = await GetAuthResultAsync();
 
-        //    return View(candidates);
-        //}
+            List<CandidateViewModel> candidates = await new ApiService(new Uri($"https://{domain}"))
+                .GetAsync<List<CandidateViewModel>>(new Uri($"https://{domain}/api/candidates"), result);
 
-        public IActionResult Create()
+            return View(candidates);
+        }
+
+        public async Task<IActionResult> Create()
         {
             return View();
         }
 
-        public IActionResult CreateSave(CandidateViewModel candidate)
+        public async Task<IActionResult> CreateSave(CandidateViewModel candidate, AuthenticationResult result)
         {
             // call api to save
-            //new ApiService(new Uri($"http://{domain}")).PostAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates"), candidate);
+            new ApiService(new Uri($"http://{domain}")).PostAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates"), candidate, result);
 
-            try
-            {
-                KPub(JsonConvert.SerializeObject(candidate));
-            }
-            catch (Exception)
-            {
-                throw;
-                //return View("Home/Error");
-            }
+            //try
+            //{
+            //    KPub(JsonConvert.SerializeObject(candidate));
+            //}
+            //catch (Exception)
+            //{
+            //    throw;
+            //    //return View("Home/Error");
+            //}
 
             ViewData["Message"] = "Candidate successfully registered";
             return View("Create");
         }
 
-        public IActionResult Edit(CandidateViewModel candidate)
+        public async Task<IActionResult> Edit(CandidateViewModel candidate)
         {
             return View(candidate);
         }
 
-        public IActionResult EditSave(CandidateViewModel candidate)
+        public async Task<IActionResult> EditSave(CandidateViewModel candidate)
         {
+            AuthenticationResult result = await GetAuthResultAsync();
+
             // call api to update
-            new ApiService(new Uri($"https://{domain}")).PutAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"), candidate);
+            new ApiService(new Uri($"https://{domain}")).PutAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"), candidate, result);
             ViewData["Message"] = "Candidate successfully updated";
             return View("Edit");
         }
 
-        public IActionResult Details(CandidateViewModel candidate)
+        public async Task<IActionResult> Details(CandidateViewModel candidate)
         {
             return View(candidate);
         }
 
-        public IActionResult Delete(CandidateViewModel candidate)
+        public async Task<IActionResult> Delete(CandidateViewModel candidate)
         {
             return View(candidate);
         }
 
-        public IActionResult DeleteSave(CandidateViewModel candidate)
+        public async Task<IActionResult> DeleteSave(CandidateViewModel candidate)
         {
+            AuthenticationResult result = await GetAuthResultAsync();
+
             // call api to delete
-            new ApiService(new Uri($"https://{domain}")).DeleteAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"));
+            new ApiService(new Uri($"https://{domain}")).DeleteAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"), result);
             ViewData["Message"] = "Candidate successfully deleted";
             return View("Delete");
         }
@@ -196,6 +190,23 @@ namespace HireToRetire.Controllers
             {
                 var deliveryReport = producer.ProduceAsync(topicName, null, data).Result;
             }
+        }
+
+        private async Task<AuthenticationResult> GetAuthResultAsync()
+        {
+            // Retrieve the token with the specified scopes
+            string signedInUserID = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            TokenCache userTokenCache = new MSALSessionCache(signedInUserID, this.HttpContext).GetMsalCacheInstance();
+            ConfidentialClientApplication cca = new ConfidentialClientApplication(clientId, authority, redirectUri, new ClientCredential(clientSecret), userTokenCache, null);
+
+            //var user = cca.Users.FirstOrDefault();
+            var user = cca.GetAccountsAsync().Result.FirstOrDefault();
+            if (user == null)
+            {
+                throw new Exception("The User is NULL.  Please clear your cookies and try again.");
+            }
+
+            return await cca.AcquireTokenSilentAsync(scope, user, authority, false);
         }
     }
 }

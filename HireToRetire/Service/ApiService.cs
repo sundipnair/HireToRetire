@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Identity.Client;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,9 +29,9 @@ namespace HireToRetire.Service
         /// <summary>  
         /// Common method for making GET calls  
         /// </summary>  
-        internal async Task<T> GetAsync<T>(Uri requestUrl)
+        internal async Task<T> GetAsync<T>(Uri requestUrl, AuthenticationResult result)
         {
-            addHeaders();
+            AddHeaders(result);
             var response = await _httpClient.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead);
             response.EnsureSuccessStatusCode();
             var data = await response.Content.ReadAsStringAsync();
@@ -39,9 +41,9 @@ namespace HireToRetire.Service
         /// <summary>  
         /// Common method for making POST calls  
         /// </summary>  
-        internal async void PostAsync<T>(Uri requestUrl, T content)
+        internal async void PostAsync<T>(Uri requestUrl, T content, AuthenticationResult result)
         {
-            addHeaders();
+            AddHeaders(result);
             var response = await _httpClient.PostAsync(requestUrl.ToString(), CreateHttpContent<T>(content));
             response.EnsureSuccessStatusCode();
             //var data = await response.Content.ReadAsStringAsync();
@@ -51,9 +53,9 @@ namespace HireToRetire.Service
         /// <summary>  
         /// Common method for making PUT calls  
         /// </summary>  
-        internal async void PutAsync<T>(Uri requestUrl, T content)
+        internal async void PutAsync<T>(Uri requestUrl, T content, AuthenticationResult result)
         {
-            addHeaders();
+            AddHeaders(result);
             var response = await _httpClient.PutAsync(requestUrl.ToString(), CreateHttpContent<T>(content));
             response.EnsureSuccessStatusCode();
             //var data = await response.Content.ReadAsStringAsync();
@@ -63,9 +65,9 @@ namespace HireToRetire.Service
         /// <summary>  
         /// Common method for making DELETE calls  
         /// </summary>  
-        internal async void DeleteAsync<T>(Uri requestUrl)
+        internal async void DeleteAsync<T>(Uri requestUrl, AuthenticationResult result)
         {
-            addHeaders();
+            AddHeaders(result);
             var response = await _httpClient.DeleteAsync(requestUrl.ToString());
             response.EnsureSuccessStatusCode();
             //var data = await response.Content.ReadAsStringAsync();
@@ -97,10 +99,14 @@ namespace HireToRetire.Service
             }
         }
 
-        private void addHeaders()
+        private void AddHeaders(AuthenticationResult result)
         {
             //_httpClient.DefaultRequestHeaders.Remove("userIP");
             //_httpClient.DefaultRequestHeaders.Add("userIP", "192.168.1.1");
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
+            _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "d8f0219eb112429ea89804114d4aff2a");
+            _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Trace", "true");
         }
     }
 }
