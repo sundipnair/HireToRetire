@@ -81,7 +81,7 @@ namespace HireToRetire.Controllers
         public async Task<IActionResult> CreateSave(CandidateViewModel candidate, AuthenticationResult result)
         {
             // call api to save
-            new ApiService(new Uri($"https://{domain}")).PostAsync<CandidateViewModel>(new Uri($"http://{domain}/api/candidates"), candidate, result);
+            new ApiService(new Uri($"https://{domain}")).PostAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates"), candidate, result);
 
             //try
             //{
