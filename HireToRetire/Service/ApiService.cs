@@ -32,7 +32,7 @@ namespace HireToRetire.Service
         internal async Task<T> GetAsync<T>(Uri requestUrl, AuthenticationResult result)
         {
             AddHeaders(result);
-            var response = await _httpClient.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead);
+            var response = await _httpClient.GetAsync(requestUrl);
             response.EnsureSuccessStatusCode();
             var data = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(data);
