@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using static HireToRetire.AzureAdB2CAuthenticationBuilderExtensions;
+using Microsoft.AspNetCore.DataProtection;
+using System.IO;
 
 namespace HireToRetire
 {
@@ -44,6 +46,8 @@ namespace HireToRetire
                 options.IdleTimeout = TimeSpan.FromHours(1);
                 options.CookieHttpOnly = true;
             });
+
+            services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(@"\\server\share\directory\"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
