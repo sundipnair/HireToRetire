@@ -32,6 +32,12 @@ namespace HireToRetire
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
+
             services.AddAuthentication(sharedOptions =>
             {
                 sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -49,12 +55,6 @@ namespace HireToRetire
             });
 
             //services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(@"\\server\share\directory\"));
-
-            services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.ForwardedHeaders =
-                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
