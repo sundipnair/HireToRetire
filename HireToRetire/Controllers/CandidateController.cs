@@ -24,7 +24,8 @@ namespace HireToRetire.Controllers
         string domain = "azdemoapimgnt.azure-api.net/candidatereg";
         string clientId = "0d36c971-15e4-4453-9e1f-2a44deb5b31e";
         string authority = "https://login.microsoftonline.com/tfp/capapps.onmicrosoft.com/B2C_1_SignUpIn/v2.0/.well-known/openid-configuration";
-        string redirectUri = "http://localhost:32768/signin-oidc";
+        //string redirectUri = "http://localhost:32768/signin-oidc";
+        string redirectUri = "https://azdemoaks-dns.westeurope.cloudapp.azure.com/hiretoretire/signin-oidc";
         string clientSecret = "M3.653[FaHr)E70Gx1D>w1E-";
         string[] scope = new string[] { "https://CapApps.onmicrosoft.com/cr-api/read" };
 
