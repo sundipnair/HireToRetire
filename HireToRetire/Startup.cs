@@ -38,7 +38,7 @@ namespace HireToRetire
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
 
                 //options.KnownProxies.Add(IPAddress.Parse("10.0.26.89"));
-                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
+               // options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
             });
 
             services.AddAuthentication(sharedOptions =>
@@ -57,7 +57,7 @@ namespace HireToRetire
                 options.CookieHttpOnly = true;
             });
 
-            services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(@"\\server\share\directory\"));
+            //services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(@"\\server\share\directory\"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
