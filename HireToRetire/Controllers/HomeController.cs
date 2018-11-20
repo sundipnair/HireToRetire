@@ -26,28 +26,34 @@ namespace HireToRetire.Controllers
 
         public IActionResult Contact()
         {
-            string xreqId = Request.Headers.ContainsKey("X-Request-ID") ? Request.Headers["X-Request-ID"].ToString() : "No X-Request-ID";
-            string xrealIp = Request.Headers.ContainsKey("X-Real-IP") ? Request.Headers["X-Real-IP"].ToString() : "No X-Real-IP";
-            string xfor = Request.Headers.ContainsKey("X-Forwarded-For") ? Request.Headers["X-Forwarded-For"].ToString() : "No X-Forwarded-For";
-            string xproto = Request.Headers.ContainsKey("X-Forwarded-Proto") ? Request.Headers["X-Forwarded-Proto"].ToString() : "No X-Forwarded-Proto";
-            string xport = Request.Headers.ContainsKey("X-Forwarded-Port") ? Request.Headers["X-Forwarded-Port"].ToString() : "No X-Forwarded-Port";
-            string xhost = Request.Headers.ContainsKey("X-Forwarded-Host") ? Request.Headers["X-Forwarded-Host"].ToString() : "No Forwarded Host";
-            string xoriguri = Request.Headers.ContainsKey("X-Original-URI") ? Request.Headers["X-Original-URI"].ToString() : "No X-Original-URI";
-            string xscheme = Request.Headers.ContainsKey("X-Scheme") ? Request.Headers["X-Scheme"].ToString() : "No X-Scheme";
-            string xorigfor = Request.Headers.ContainsKey("X-Original-Forwarded-For") ? Request.Headers["X-Original-Forwarded-For"].ToString() : "No X-Original-Forwarded-For";
-            string xcustom = Request.Headers.ContainsKey("X-Custom-String") ? Request.Headers["X-Custom-String"].ToString() : "No X-Custom-String";
+            string headerData = "";
+            Request.Headers.Keys.ToList().ForEach(key =>
+            {
+                headerData += $"<br> {key} || {Request.Headers[key].ToString()} ";
+            });
 
-            ViewData["Message"] = $"Your contact page. " +
-                $"<br> X-Request-ID || {xreqId} " +
-                $"<br> X-Real-IP || {xrealIp} " +
-                $"<br> X-Forwarded-For || {xfor} " +
-                $"<br> X-Forwarded-Proto || {xproto} " +
-                $"<br> X-Forwarded-Port || {xport} " +
-                $"<br> X-Forwarded-Host || {xhost} " +
-                $"<br> X-Original-URI || {xoriguri} " +
-                $"<br> X-Scheme || {xscheme} " +
-                $"<br> X-Original-Forwarded-For || {xorigfor}" +
-                $"<br> X-Custom-String || {xcustom}";
+            //string xreqId = Request.Headers.ContainsKey("X-Request-ID") ? Request.Headers["X-Request-ID"].ToString() : "No X-Request-ID";
+            //string xrealIp = Request.Headers.ContainsKey("X-Real-IP") ? Request.Headers["X-Real-IP"].ToString() : "No X-Real-IP";
+            //string xfor = Request.Headers.ContainsKey("X-Forwarded-For") ? Request.Headers["X-Forwarded-For"].ToString() : "No X-Forwarded-For";
+            //string xproto = Request.Headers.ContainsKey("X-Forwarded-Proto") ? Request.Headers["X-Forwarded-Proto"].ToString() : "No X-Forwarded-Proto";
+            //string xport = Request.Headers.ContainsKey("X-Forwarded-Port") ? Request.Headers["X-Forwarded-Port"].ToString() : "No X-Forwarded-Port";
+            //string xhost = Request.Headers.ContainsKey("X-Forwarded-Host") ? Request.Headers["X-Forwarded-Host"].ToString() : "No Forwarded Host";
+            //string xoriguri = Request.Headers.ContainsKey("X-Original-URI") ? Request.Headers["X-Original-URI"].ToString() : "No X-Original-URI";
+            //string xscheme = Request.Headers.ContainsKey("X-Scheme") ? Request.Headers["X-Scheme"].ToString() : "No X-Scheme";
+            //string xorigfor = Request.Headers.ContainsKey("X-Original-Forwarded-For") ? Request.Headers["X-Original-Forwarded-For"].ToString() : "No X-Original-Forwarded-For";
+            //string xcustom = Request.Headers.ContainsKey("X-Custom-String") ? Request.Headers["X-Custom-String"].ToString() : "No X-Custom-String";
+
+            ViewData["Message"] = $"Your contact page. " + headerData;
+            //$"<br> X-Request-ID || {xreqId} " +
+            //$"<br> X-Real-IP || {xrealIp} " +
+            //$"<br> X-Forwarded-For || {xfor} " +
+            //$"<br> X-Forwarded-Proto || {xproto} " +
+            //$"<br> X-Forwarded-Port || {xport} " +
+            //$"<br> X-Forwarded-Host || {xhost} " +
+            //$"<br> X-Original-URI || {xoriguri} " +
+            //$"<br> X-Scheme || {xscheme} " +
+            //$"<br> X-Original-Forwarded-For || {xorigfor}" +
+            //$"<br> X-Custom-String || {xcustom}";
 
             return View();
         }
