@@ -29,8 +29,9 @@ namespace HireToRetire.Controllers
             string forwardedFor = Request.Headers.ContainsKey("X-Forwarded-For") ? Request.Headers["X-Forwarded-For"].ToString() : "No Forwarded For";
             string forwardedProto = Request.Headers.ContainsKey("X-Forwarded-Proto") ? Request.Headers["X-Forwarded-Proto"].ToString() : "No Forwarded Proto";
             string forwardedHost = Request.Headers.ContainsKey("X-Forwarded-Host") ? Request.Headers["X-Forwarded-Host"].ToString() : "No Forwarded Host";
+            string xcustom = Request.Headers.ContainsKey("X-Custom-String") ? Request.Headers["X-Custom-String"].ToString() : "No Forwarded Custom String";
 
-            ViewData["Message"] = $"Your contact page. || For || {forwardedFor} || Proto || {forwardedProto} || Host || {forwardedHost}";
+            ViewData["Message"] = $"Your contact page. || For || {forwardedFor} || Proto || {forwardedProto} || Host || {forwardedHost} || Custom || {xcustom}";
 
             return View();
         }
