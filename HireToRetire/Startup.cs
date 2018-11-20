@@ -35,9 +35,9 @@ namespace HireToRetire
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.ForwardedHeaders = ForwardedHeaders.All;
 
-                //options.KnownProxies.Add(IPAddress.Parse("10.0.26.89"));
+                options.KnownProxies.Add(IPAddress.Parse("10.240.0.8"));
                // options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
             });
 
