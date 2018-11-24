@@ -90,8 +90,7 @@ namespace HireToRetire.Controllers
             }
             catch (Exception)
             {
-                throw;
-                //return View("Home/Error");
+                return View("Home/Error");
             }
 
             ViewData["Message"] = "Candidate successfully registered";
