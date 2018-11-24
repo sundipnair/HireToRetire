@@ -18,7 +18,7 @@ using System.Net.Http.Headers;
 
 namespace HireToRetire.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class CandidateController : Controller
     {
         string domain = "azdemoapimgnt.azure-api.net/candidatereg";
@@ -79,20 +79,20 @@ namespace HireToRetire.Controllers
             return View();
         }
 
-        public async Task<IActionResult> CreateSave(CandidateViewModel candidate, AuthenticationResult result)
+        public async Task<IActionResult> CreateSave(CandidateViewModel candidate)
         {
             // call api to save
-            new ApiService(new Uri($"https://{domain}")).PostAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates"), candidate, result);
+            //new ApiService(new Uri($"https://{domain}")).PostAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates"), candidate, result);
 
-            //try
-            //{
-            //    KPub(JsonConvert.SerializeObject(candidate));
-            //}
-            //catch (Exception)
-            //{
-            //    throw;
-            //    //return View("Home/Error");
-            //}
+            try
+            {
+                KPub(JsonConvert.SerializeObject(candidate));
+            }
+            catch (Exception)
+            {
+                throw;
+                //return View("Home/Error");
+            }
 
             ViewData["Message"] = "Candidate successfully registered";
             return View("Create");
@@ -181,10 +181,12 @@ namespace HireToRetire.Controllers
         private void KPub(string data)
         {
             string topicName = "candidate-topic";
+            string server = "confkafka-cp-kafka:9092";
+            //string server = "localhost:9092";
 
             var config = new Dictionary<string, object>
             {
-                { "bootstrap.servers", "confkafka-cp-kafka:9092" }
+                { "bootstrap.servers", server },
             };
 
             using (var producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8)))
