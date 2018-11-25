@@ -66,10 +66,10 @@ namespace HireToRetire.Controllers
 
         public async Task<IActionResult> Index()
         {
-            AuthenticationResult result = await GetAuthResultAsync();
+            //AuthenticationResult result = await GetAuthResultAsync();
 
-            List<CandidateViewModel> candidates = await new ApiService(new Uri($"https://{domain}"))
-                .GetAsync<List<CandidateViewModel>>(new Uri($"https://{domain}/api/candidates"), result);
+            //List<CandidateViewModel> candidates = await new ApiService(new Uri($"https://{domain}")).GetAsync<List<CandidateViewModel>>(new Uri($"https://{domain}/api/candidates"), result);
+            List<CandidateViewModel> candidates = await new ApiService(new Uri($"https://{domain}")).GetAsync<List<CandidateViewModel>>(new Uri($"https://{domain}/api/candidates"), null);
 
             return View(candidates);
         }
@@ -104,10 +104,11 @@ namespace HireToRetire.Controllers
 
         public async Task<IActionResult> EditSave(CandidateViewModel candidate)
         {
-            AuthenticationResult result = await GetAuthResultAsync();
+            //AuthenticationResult result = await GetAuthResultAsync();
 
             // call api to update
-            new ApiService(new Uri($"https://{domain}")).PutAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"), candidate, result);
+            //new ApiService(new Uri($"https://{domain}")).PutAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"), candidate, result);
+            new ApiService(new Uri($"https://{domain}")).PutAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"), candidate, null);
             ViewData["Message"] = "Candidate successfully updated";
             return View("Edit");
         }
@@ -124,10 +125,11 @@ namespace HireToRetire.Controllers
 
         public async Task<IActionResult> DeleteSave(CandidateViewModel candidate)
         {
-            AuthenticationResult result = await GetAuthResultAsync();
+            //AuthenticationResult result = await GetAuthResultAsync();
 
             // call api to delete
-            new ApiService(new Uri($"https://{domain}")).DeleteAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"), result);
+            //new ApiService(new Uri($"https://{domain}")).DeleteAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"), result);
+            new ApiService(new Uri($"https://{domain}")).DeleteAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"), null);
             ViewData["Message"] = "Candidate successfully deleted";
             return View("Delete");
         }
