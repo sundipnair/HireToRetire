@@ -192,7 +192,9 @@ namespace HireToRetire.Controllers
 
             using (var producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8)))
             {
-                var deliveryReport = producer.ProduceAsync(topicName, null, data).Result;
+                var deliveryReport = producer.ProduceAsync(topicName, null, data);
+
+                producer.Flush(500);
             }
         }
 
