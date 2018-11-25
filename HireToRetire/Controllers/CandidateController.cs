@@ -88,7 +88,7 @@ namespace HireToRetire.Controllers
             {
                 KPub(JsonConvert.SerializeObject(candidate));
             }
-            catch (Exception)
+            catch (Exception ex) 
             {
                 return View("Home/Error");
             }
@@ -188,13 +188,16 @@ namespace HireToRetire.Controllers
             var config = new Dictionary<string, object>
             {
                 { "bootstrap.servers", server },
+                //{ "acks", "all" },
+                //{ "key.serializer", "org.apache.kafka.common.serialization.StringSerializer" },
+                //{ "value.serializer", "org.apache.kafka.common.serialization.StringSerializer" },
             };
 
             using (var producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8)))
             {
-                var deliveryReport = producer.ProduceAsync(topicName, null, data);
+                var deliveryReport = producer.ProduceAsync(topicName, null, data).Result;
 
-                producer.Flush(500);
+                //producer.Flush(500);
             }
         }
 
