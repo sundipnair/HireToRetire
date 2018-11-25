@@ -86,7 +86,7 @@ namespace HireToRetire.Controllers
 
             try
             {
-                KPub(JsonConvert.SerializeObject(candidate));
+                //KPub(JsonConvert.SerializeObject(candidate));
             }
             catch (Exception)
             {
