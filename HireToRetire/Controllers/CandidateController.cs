@@ -23,6 +23,8 @@ namespace HireToRetire.Controllers
     {
         //string domain = "azdemoapimgnt.azure-api.net/candidatereg";
         string domain = "candidateregistration";
+        //string scheme = "https";
+        string scheme = "http";
         string clientId = "0d36c971-15e4-4453-9e1f-2a44deb5b31e";
         string authority = "https://login.microsoftonline.com/tfp/capapps.onmicrosoft.com/B2C_1_SignUpIn/v2.0/.well-known/openid-configuration";
         //string redirectUri = "http://localhost:32768/signin-oidc";
@@ -36,7 +38,7 @@ namespace HireToRetire.Controllers
             {
                 AuthenticationResult result = await GetAuthResultAsync();
 
-                string apiEndpoint = $"https://{domain}/api/Candidates/Test";
+                string apiEndpoint = $"{scheme}://{domain}/api/Candidates/Test";
                 HttpClient client = new HttpClient();
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, apiEndpoint);
 
@@ -69,8 +71,8 @@ namespace HireToRetire.Controllers
         {
             //AuthenticationResult result = await GetAuthResultAsync();
 
-            //List<CandidateViewModel> candidates = await new ApiService(new Uri($"https://{domain}")).GetAsync<List<CandidateViewModel>>(new Uri($"https://{domain}/api/candidates"), result);
-            List<CandidateViewModel> candidates = await new ApiService(new Uri($"https://{domain}")).GetAsync<List<CandidateViewModel>>(new Uri($"https://{domain}/api/candidates"), null);
+            //List<CandidateViewModel> candidates = await new ApiService(new Uri($"{scheme}://{domain}")).GetAsync<List<CandidateViewModel>>(new Uri($"{scheme}://{domain}/api/candidates"), result);
+            List<CandidateViewModel> candidates = await new ApiService(new Uri($"{scheme}://{domain}")).GetAsync<List<CandidateViewModel>>(new Uri($"{scheme}://{domain}/api/candidates"), null);
 
             return View(candidates);
         }
@@ -83,8 +85,8 @@ namespace HireToRetire.Controllers
         public async Task<IActionResult> CreateSave(CandidateViewModel candidate)
         {
             // call api to save
-            //new ApiService(new Uri($"https://{domain}")).PostAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates"), candidate, result);
-            new ApiService(new Uri($"https://{domain}")).PostAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates"), candidate, null);
+            //new ApiService(new Uri($"{scheme}://{domain}")).PostAsync<CandidateViewModel>(new Uri($"{scheme}://{domain}/api/candidates"), candidate, result);
+            new ApiService(new Uri($"{scheme}://{domain}")).PostAsync<CandidateViewModel>(new Uri($"{scheme}://{domain}/api/candidates"), candidate, null);
 
             //try
             //{
@@ -109,8 +111,8 @@ namespace HireToRetire.Controllers
             //AuthenticationResult result = await GetAuthResultAsync();
 
             // call api to update
-            //new ApiService(new Uri($"https://{domain}")).PutAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"), candidate, result);
-            new ApiService(new Uri($"https://{domain}")).PutAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"), candidate, null);
+            //new ApiService(new Uri($"{scheme}://{domain}")).PutAsync<CandidateViewModel>(new Uri($"{scheme}://{domain}/api/candidates/{candidate.Id}"), candidate, result);
+            new ApiService(new Uri($"{scheme}://{domain}")).PutAsync<CandidateViewModel>(new Uri($"{scheme}://{domain}/api/candidates/{candidate.Id}"), candidate, null);
             ViewData["Message"] = "Candidate successfully updated";
             return View("Edit");
         }
@@ -130,8 +132,8 @@ namespace HireToRetire.Controllers
             //AuthenticationResult result = await GetAuthResultAsync();
 
             // call api to delete
-            //new ApiService(new Uri($"https://{domain}")).DeleteAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"), result);
-            new ApiService(new Uri($"https://{domain}")).DeleteAsync<CandidateViewModel>(new Uri($"https://{domain}/api/candidates/{candidate.Id}"), null);
+            //new ApiService(new Uri($"{scheme}://{domain}")).DeleteAsync<CandidateViewModel>(new Uri($"{scheme}://{domain}/api/candidates/{candidate.Id}"), result);
+            new ApiService(new Uri($"{scheme}://{domain}")).DeleteAsync<CandidateViewModel>(new Uri($"{scheme}://{domain}/api/candidates/{candidate.Id}"), null);
             ViewData["Message"] = "Candidate successfully deleted";
             return View("Delete");
         }
