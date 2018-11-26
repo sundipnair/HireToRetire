@@ -21,7 +21,8 @@ namespace HireToRetire.Controllers
     //[Authorize]
     public class CandidateController : Controller
     {
-        string domain = "azdemoapimgnt.azure-api.net/candidatereg";
+        //string domain = "azdemoapimgnt.azure-api.net/candidatereg";
+        string domain = "candidateregistration";
         string clientId = "0d36c971-15e4-4453-9e1f-2a44deb5b31e";
         string authority = "https://login.microsoftonline.com/tfp/capapps.onmicrosoft.com/B2C_1_SignUpIn/v2.0/.well-known/openid-configuration";
         //string redirectUri = "http://localhost:32768/signin-oidc";
