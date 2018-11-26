@@ -104,7 +104,8 @@ namespace HireToRetire.Service
             //_httpClient.DefaultRequestHeaders.Remove("userIP");
             //_httpClient.DefaultRequestHeaders.Add("userIP", "192.168.1.1");
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
+            if (result != null)
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
             _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "d8f0219eb112429ea89804114d4aff2a");
             _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Trace", "true");
         }
