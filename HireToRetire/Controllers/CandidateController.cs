@@ -86,16 +86,16 @@ namespace HireToRetire.Controllers
         {
             // call api to save
             //new ApiService(new Uri($"{scheme}://{domain}")).PostAsync<CandidateViewModel>(new Uri($"{scheme}://{domain}/api/candidates"), candidate, result);
-            new ApiService(new Uri($"{scheme}://{domain}")).PostAsync<CandidateViewModel>(new Uri($"{scheme}://{domain}/api/candidates"), candidate, null);
+            //new ApiService(new Uri($"{scheme}://{domain}")).PostAsync<CandidateViewModel>(new Uri($"{scheme}://{domain}/api/candidates"), candidate, null);
 
-            //try
-            //{
-            //    KPub(JsonConvert.SerializeObject(candidate));
-            //}
-            //catch (Exception ex) 
-            //{
-            //    return View("Home/Error");
-            //}
+            try
+            {
+                KPub(JsonConvert.SerializeObject(candidate));
+            }
+            catch (Exception ex)
+            {
+                return View("Home/Error");
+            }
 
             ViewData["Message"] = "Candidate successfully registered";
             return View("Create");
@@ -186,8 +186,8 @@ namespace HireToRetire.Controllers
         private void KPub(string data)
         {
             string topicName = "candidate-topic";
-            //string server = "confkafka-cp-kafka:9092";
-            string server = "localhost:9092";
+            string server = "confkafka-cp-kafka.kafka-system.svc.cluster.local:9092";
+            //string server = "localhost:9092";
 
             var config = new Dictionary<string, object>
             {
